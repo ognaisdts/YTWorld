@@ -1,0 +1,18 @@
+#version 120
+
+// Input vertex data, different for all executions of this shader.
+attribute vec3 vertexPosition_modelspace;
+ 
+ varying vec3 color
+ 
+// Values that stay constant for the whole mesh.
+uniform mat4 fullTransformMatrix;
+
+void main(){
+
+	// Output position of the vertex, in clip space : MVP * position
+	gl_Position =  fullTransformMatrix * vec4(vertexPosition_modelspace,1);
+
+	color = vec3(1,1,0);
+}
+
