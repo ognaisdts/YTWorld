@@ -44,12 +44,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\USER\Desktop\C++PracticeProject\GLlibSet\Glew and Glut\glew-1.11.0\include;C:\Users\USER\Desktop\C++PracticeProject\GLlibSet\glfw-3.1.2.bin.WIN32\include;C:\Users\USER\Desktop\C++PracticeProject\GLlibSet\glm</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\USER\Desktop\C++PracticeProject\GLlibSet\Glew and Glut\glew-1.11.0\include;C:\Users\USER\Desktop\C++PracticeProject\GLlibSet\glfw-3.1.2.bin.WIN32\include;C:\Users\USER\Desktop\C++PracticeProject\GLlibSet\glm;C:\Users\ytowo\Desktop\C++PracticeProject\YTWorld\YTWorld\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\USER\Desktop\C++PracticeProject\GLlibSet\Glew and Glut\glew-1.11.0\lib;C:\Users\USER\Desktop\C++PracticeProject\GLlibSet\glfw-3.1.2.bin.WIN32\lib-vc2013;C:\Users\USER\Desktop\C++PracticeProject\GLlibSet\glfw-3.1.2.bin.WIN64\lib-mingw-w64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\ytowo\Desktop\C++PracticeProject\YTWorld\YTWorld\libs;C:\Users\USER\Desktop\C++PracticeProject\GLlibSet\Glew and Glut\glew-1.11.0\lib;C:\Users\USER\Desktop\C++PracticeProject\GLlibSet\glfw-3.1.2.bin.WIN32\lib-vc2013;C:\Users\USER\Desktop\C++PracticeProject\GLlibSet\glfw-3.1.2.bin.WIN64\lib-mingw-w64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glew32.lib;glfw3.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
