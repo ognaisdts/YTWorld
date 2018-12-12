@@ -87,9 +87,15 @@ bool CollisionDetection::SATcheck(GameObject &obj1, GameObject &obj2)
 */
 void CollisionDetection::ElasticCollision(GameObject *obj1, GameObject *obj2, float coef)
 {
+	if (obj1->m_rigid == nullptr || obj2->m_rigid == nullptr)
+		return;
 
-	obj1->m_velocity = (obj1->m_mass*obj1->m_velocity + obj2->m_mass*obj2->m_velocity + coef *obj2->m_mass*(obj2->m_velocity - obj1->m_velocity)) / (obj1->m_mass + obj2->m_mass);
-	obj2->m_velocity = (obj1->m_mass*obj1->m_velocity + obj2->m_mass*obj2->m_velocity +  coef *obj1->m_mass*(obj1->m_velocity - obj2->m_velocity)) / (obj1->m_mass + obj2->m_mass);
+
+	RigidBody *rigidObj1 = obj1->m_rigid;
+	RigidBody *rigidObj2 = obj2->m_rigid;
+
+	rigidObj1->m_velocity = (rigidObj1->m_mass*rigidObj1->m_velocity + rigidObj2->m_mass*rigidObj2->m_velocity + coef *rigidObj2->m_mass*(rigidObj2->m_velocity - rigidObj1->m_velocity)) / (rigidObj1->m_mass + rigidObj2->m_mass);
+	rigidObj2->m_velocity = (rigidObj1->m_mass*rigidObj1->m_velocity + rigidObj2->m_mass*rigidObj2->m_velocity +  coef *rigidObj1->m_mass*(rigidObj1->m_velocity - rigidObj2->m_velocity)) / (rigidObj1->m_mass + rigidObj2->m_mass);
 }
 
 bool CollisionDetection::checkFaceAxis(int &AxisNo, int curAxisNo, float &sMax, float curS, vec3 &normal, vec3 curNormal)
@@ -348,31 +354,39 @@ void CollisionDetection::processCollisionRespond(std::vector<IntersectInfo*> Int
 
 	for each (IntersectInfo *info in IntersectionList)
 	{
+
 		//positon adjust;
 		GameObject *A = info->manifold.objA;
 		GameObject *B = info->manifold.objB;
+
+		if (A->m_rigid == nullptr || B->m_rigid == nullptr)
+			continue;
+
 		vec3 normal = info->manifold.contacts[0].normal;
 		float penetration = info->manifold.contacts[0].penetration;
+		RigidBody *rigidA = A->m_rigid;
+		RigidBody *rigidB = B->m_rigid;
+
 
 		////Impulse
-		vec3 relVel = B->m_velocity - A->m_velocity;
+		vec3 relVel = rigidB->m_velocity - rigidA->m_velocity;
 		float contactVel = dot(relVel, normal);
 		if (contactVel > 0) return;
 		float coe = 0;
 		float J = -(1.0f + coe)*contactVel;
-		J /=(1.0f/ A->m_mass) + (1.0f/B->m_mass);
+		J /=(1.0f/ rigidA->m_mass) + (1.0f/ rigidB->m_mass);
 
 		vec3 Impluse = J * normal;
-		A->m_velocity -= (1.0f / A->m_mass)*Impluse;
-		B->m_velocity += (1.0f / B->m_mass)*Impluse;
+		rigidA->m_velocity -= (1.0f / rigidA->m_mass)*Impluse;
+		rigidB->m_velocity += (1.0f / rigidB->m_mass)*Impluse;
 		//ElasticCollision(A, B, 0);  instead abrove
 
 		//Penetration Resolution
 		const float k_slop = 0.01f; // Penetration allowance
 		const float percent = 0.8f; // Penetration percentage to correct
-		vec3 correction = (std::max(penetration - k_slop, 0.0f) / ((1.0f / A->m_mass) + (1.0f / B->m_mass))) * percent * normal;
-		A->position -= (1.0f / A->m_mass)* correction;
-		B->position += (1.0f / B->m_mass) * correction;
+		vec3 correction = (std::max(penetration - k_slop, 0.0f) / ((1.0f / rigidA->m_mass) + (1.0f / rigidB->m_mass))) * percent * normal;
+		A->position -= (1.0f / rigidA->m_mass)* correction;
+		B->position += (1.0f / rigidB->m_mass) * correction;
 
 
 		cout << "normal " << info->manifold.contacts[0].normal.x << ", " << info->manifold.contacts[0].normal.y << ", " << info->manifold.contacts[0].normal.z << endl;

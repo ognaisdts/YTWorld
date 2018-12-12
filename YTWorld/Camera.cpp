@@ -32,6 +32,10 @@ void Camera::mouseUpdate(const glm::vec2 &newMousePosition)
 	oldMousePosition = newMousePosition;
  
 }
+void Camera::SetOldMousePosition(const glm::vec2 &newMousePosition)
+{
+	oldMousePosition = newMousePosition;
+}
 
 void Camera::keyboardUpdate(GLFWwindow *window)
 {
@@ -68,6 +72,34 @@ glm::mat4 Camera::getWorldToViewMatrix() const
 {
 	return glm::lookAt(position, position + viewDirection, Up);
 
+}
+
+void Camera::UpdateCamera(GLFWwindow* window)
+{
+	//catch mouse movement
+	int state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
+	if (state == GLFW_PRESS)
+	{
+		double xpos, ypos;
+		glfwGetCursorPos(window, &xpos, &ypos);
+		if (!m_clickedMouseRight)
+		{
+			m_clickedMouseRight = true;
+			SetOldMousePosition(vec2(xpos, ypos));
+		}
+		else
+		{
+			mouseUpdate(vec2(xpos, ypos));
+		}
+
+	}
+	else
+	{
+		m_clickedMouseRight = false;
+	}
+
+
+	keyboardUpdate(window);
 }
 
 //Camera::~Camera()

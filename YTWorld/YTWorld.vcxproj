@@ -81,7 +81,7 @@
     <ClCompile Include="CommonFunction\ObjLoader.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObjects\GroundObject.cpp" />
-    <ClCompile Include="InputControl.cpp" />
+    <ClCompile Include="InputControl\InputControl.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Geometry\Mesh.cpp" />
     <ClCompile Include="Geometry\Material.cpp" />
@@ -89,6 +89,11 @@
     <ClCompile Include="CollisionDetection\OcTreeNode.cpp" />
     <ClCompile Include="Primitives\ShapeGenerator.cpp" />
     <ClCompile Include="Geometry\Shader.cpp" />
+    <ClCompile Include="Render\RenderComponent.cpp" />
+    <ClCompile Include="Render\RenderManager.cpp" />
+    <ClCompile Include="Physic\RigidBody.cpp" />
+    <ClCompile Include="Scene\Scene.cpp" />
+    <ClCompile Include="Scene\TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoundingBox.h" />
@@ -98,16 +103,21 @@
     <ClInclude Include="CommonFunction\ObjLoader.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjects\GroundObject.h" />
-    <ClInclude Include="InputControl.h" />
+    <ClInclude Include="InputControl\InputControl.h" />
     <ClInclude Include="Geometry\Mesh.h" />
     <ClInclude Include="Geometry\Material.h" />
     <ClInclude Include="MousePicker.h" />
     <ClInclude Include="CollisionDetection\OcTreeNode.h" />
     <ClInclude Include="Primitives\ShapeData.h" />
     <ClInclude Include="Primitives\Vertex.h" />
+    <ClInclude Include="Render\RenderComponent.h" />
+    <ClInclude Include="Render\RenderManager.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Primitives\ShapeGenerator.h" />
     <ClInclude Include="Geometry\Shader.h" />
+    <ClInclude Include="Physic\RigidBody.h" />
+    <ClInclude Include="Scene\Scene.h" />
+    <ClInclude Include="Scene\TestScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="YTWorld.rc" />

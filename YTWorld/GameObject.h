@@ -11,6 +11,8 @@
 #include "BoundingBox.h"
 #include "CollisionDetection\CollisionDetection.h"
 #include "CollisionDetection\OcTreeNode.h"
+#include "Render\RenderComponent.h"
+#include "Physic\RigidBody.h"
 
 using namespace glm;
 using namespace std;
@@ -23,11 +25,6 @@ public:
 	//GameObject();
 
 	GameObject(
-		const char* objfile, 
-		const char* ddsfile, 
-		const char* vertexShader,
-		const char* fragmentShader,
-		std::map<std::string, Mesh> &existList,
 		vec3 _position,
 		float angle =0
 		);
@@ -44,35 +41,25 @@ public:
 	glm::mat4 projectionMatrix;
 	mat4 translateMatrix; //= glm::translate(vec3(0.0f, 0.0f, -3.0f));
 	mat4 rotationMatrix;// = glm::rotate(angle, vec3(1.0f, 0.0f, 0.0f));   // include gtx\transform
-
+	RenderComponent *m_renderComponent;
 
 	//geomethod
 	glm::mat4 getModelToWorldMatrix();
 	void setModelMatrix( glm::mat4 rotationM, glm::mat4 translateM  );
-	//void setWorldToViewMatrix( glm::mat4 _worldToViewMatrix );
 	//openGL method and member
 
-	void InitGLdata(const char* objFilePath, const char* ddsFilePath, const char* vertexShader, const char* fragmentShader, std::map<std::string, Mesh> &_existList);
-	void createMesh(const char* ddsFilePath, std::map<std::string, Mesh> &_existList);
-	void createShader(const char* vertexShader, const char* fragmentShader);
-	void createMaterial(const char* ddsFilePath);
 
-	void createBoundingBox();
 
-	void Draw( glm::mat4 worldToViewMatrix );
+	void CreateBoundingBox();
+	void AddRenderComponent(const char* objFilePath, const char* ddsFilePath, const char* vertexShader, const char* fragmentShader, bool isSky = false);
+	void AddRigidBody(float _mass = 1.0f, float _coe = 0);
 
 	//OcTree
 	virtual void Update(float deltaTime); // current for oct 
-	set<OcTreeNode*> ownerNodes; // which node are this obj inside
-	void refreshOwner();
 	OcTreeNode *m_owner;
 	void refreshOcTree();
 
-	Mesh *m_mesh;
-	Shader *m_shader;
-	Material *m_material;
- 
-	GLuint Texture;
+
 
 	BoundingBox *m_obb;
 
@@ -83,27 +70,9 @@ public:
 
 
 	// physic data
-	  glm::vec3 m_velocity;
-	  float m_mass;
-	  glm::vec3 m_accelerate;
-	  glm::vec3 m_force;
-	  bool isJump;
-
-	  void addFroceToOther(GameObject *other);
-
-	  float m_coe;
+	RigidBody *m_rigid;
+	bool isJump;
 
 
-	//std::map<std::string, std::vector<GLuint>> m_existList;
-
-	//// openGL method
-	//void RegisterObjMesh(const char* objfile, const char* ddsfile, std::map<std::string, std::vector<GLuint>> &existList);
-	//void setShaderProgram(GLuint newShaderProgramID, std::map<std::string, std::vector<GLuint>> &existList);
-	//void  Draw(glm::mat4 viewMatrix, mat4 projectionMatrix);
-	//// openGL member
-	//GLuint MeshVertexArrayID;
-	//GLuint numVertices;
-	//GLuint Texture;
-	//GLuint ShaderProgramID;
 };
 

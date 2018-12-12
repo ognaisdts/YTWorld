@@ -1,11 +1,14 @@
 #include "Mesh.h"
  
-Mesh::Mesh(std::map<std::string, Mesh> &_existList, const char* objFilePath)
-	:existList(_existList)
+
+std::map<std::string, Mesh> Mesh::existList;
+
+
+Mesh::Mesh( const char* objFilePath)
 {
 	InitMesh(objFilePath);
  }
-void	Mesh::InitMesh(const char* objFilePath)
+void Mesh::InitMesh(const char* objFilePath)
 {
 	if (existList.find(objFilePath) != existList.end())
 	{

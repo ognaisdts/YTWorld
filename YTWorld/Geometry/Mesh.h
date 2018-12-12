@@ -10,21 +10,23 @@
 #include <stdlib.h>
 #include <glm/glm.hpp> 
 #include "../CommonFunction/ObjLoader.h"
- 
+
 
 
 class Mesh
 {
+
 public:
+
 	Mesh(){}
-	Mesh(std::map<std::string, Mesh> &_existList, const char* objFilePath);
+	Mesh(const char* objFilePath);
 	~Mesh();
 
-	void	InitMesh(const char* objFilePath);
+	void  InitMesh(const char* objFilePath);
 	void  Draw();
+	static std::map<std::string, Mesh> existList;//obj name, vertex array ID,  numVertice
 
 	//member
-	std::map<std::string, Mesh> existList;
 	GLuint m_vertexArrayObjID;
 	GLuint	m_numVertices;
 	GLuint	m_numCoords;
@@ -34,4 +36,5 @@ public:
 	glm::vec3 max;
  
 };
+
 

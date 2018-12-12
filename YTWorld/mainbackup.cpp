@@ -420,20 +420,20 @@ int main(void)
 	  GameObject box1("Asset/crate.obj", "Asset/Crate_1.DDS", "TransformVertexShader.vertexshader", "TextureFragmentShader.fragmentshader", objList,
 		  vec3(0,0,-3.0f));	  
 	  box1.setModelMatrix(rotate(45.0f, vec3(0, 1, 0)), box1.translateMatrix);
-	  box1.createBoundingBox();
+	  box1.CreateBoundingBox();
 
 	  GameObject box2("Asset/crate.obj", "Asset/Crate_1.DDS", "TransformVertexShader.vertexshader", "TextureFragmentShader.fragmentshader", objList,
 		  vec3(3.0f, 0, -3.0f));
-	  box2.createBoundingBox();
+	  box2.CreateBoundingBox();
 
 
 	  GameObject gameobj2("Asset/skybox.obj", "Asset/skybox.dds", "TransformVertexShader.vertexshader", "TextureFragmentShader.fragmentshader", objList,
 		  vec3(0, -1.0f, 0));
 	  gameobj2.setModelMatrix(rotate(radians(-90.0f), vec3(1 ,0, 0)), gameobj2.translateMatrix);
-	//  gameobj2.createBoundingBox();
+	//  gameobj2.CreateBoundingBox();
 	  GameObject gameobj3("Asset/ground.obj", "Asset/ground.DDS", "TransformVertexShader.vertexshader", "TextureFragmentShader.fragmentshader", objList,
 		  vec3(0, -0.5f, 0));
-	  gameobj3.createBoundingBox();
+	  gameobj3.CreateBoundingBox();
 
 	  MousePicker *mousePicker = new MousePicker(camera, projectionMatrix, window);
 

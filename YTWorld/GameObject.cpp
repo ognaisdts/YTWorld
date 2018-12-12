@@ -5,6 +5,7 @@
 #include <glm/glm.hpp> 
 #include "CommonFunction\ObjLoader.h"
 #include "CommonFunction\DDSLoader.h"
+#include "Render\RenderManager.h"
 
 using namespace glm;
 using namespace std;
@@ -16,11 +17,6 @@ using namespace std;
 //
 //}
 GameObject::GameObject(
-				const char* objfile,
-				const char* ddsfile,
-				const char* vertexShader,
-				const char* fragmentShader,
-				std::map<std::string, Mesh> &existList,
 				vec3 _position,
 				float angle
 	)
@@ -31,79 +27,37 @@ GameObject::GameObject(
 	 m_obb(nullptr),
 	 m_angle(angle)
 {
-	m_velocity = vec3(0, 0, 0);
-	m_accelerate = vec3(0, 0, 0);
-	m_force = vec3(0, 0, 0);
-	m_mass = 1.0f;
-	m_coe = 0;
 	isJump = false;
 	projectionMatrix = glm::perspective(glm::radians(67.0f), 640.f / 480.0f, 0.3f, 1000.0f);
- 	InitGLdata(objfile, ddsfile, vertexShader, fragmentShader, existList);
+ 	//InitGLdata(objfile, ddsfile, vertexShader, fragmentShader);
 
 }
 
-void GameObject::InitGLdata(const char* objFilePath, const char* ddsFilePath, const char* vertexShader, const char* fragmentShader, std::map<std::string, Mesh> &_existList)
+void GameObject::CreateBoundingBox()
 {
-	createShader(vertexShader, fragmentShader);
-	createMesh(objFilePath, _existList);
- 
-	createMaterial(ddsFilePath);
-
-	glBindVertexArray(0);
-
-}
-
-void GameObject::createMesh(const char* objFilePath, std::map<std::string, Mesh> &_existList)
-{
-	if (m_mesh == nullptr)
-		m_mesh = new Mesh(_existList, objFilePath);
-}
-void GameObject::createShader(const char* vertexShader, const char* fragmentShader)
-{
-	if (m_shader==nullptr)
-		m_shader = new Shader(vertexShader, fragmentShader);
-}
-void GameObject::createMaterial(const char* ddsFilePath )
-{
-	if (m_material == nullptr)
-		m_material = new Material(ddsFilePath);
-}
-void GameObject::createBoundingBox()
-{
-	if (m_mesh != nullptr && m_obb == nullptr)
+	//if (m_mesh != nullptr && m_obb == nullptr)
+	if(m_renderComponent!= nullptr)
 	{
-		m_obb = new BoundingBox(m_mesh->min, m_mesh->max);
+		m_obb = new BoundingBox(m_renderComponent->m_mesh->min, m_renderComponent->m_mesh->max);
 	}
  
 }
 
-
-
-void GameObject::Draw(glm::mat4 worldToViewMatrix)
+void GameObject::AddRenderComponent(const char* objFilePath, const char* ddsFilePath, const char* vertexShader, const char* fragmentShader, bool isSky)
 {
-
-
-	if (m_mesh == nullptr) return;
-	  m_fullMatrix = projectionMatrix*worldToViewMatrix* this->getModelToWorldMatrix();
-
-	//////// draw bounding box
-
-	if (m_shader != nullptr)
+	if (m_renderComponent == nullptr)
 	{
-		m_shader->Bind();
-		
-		m_shader->UpdateShader(m_fullMatrix);
+		m_renderComponent = new RenderComponent(objFilePath, ddsFilePath, vertexShader, fragmentShader, isSky);
+		RenderManager::RegisterGameObject(this);
 	}
-	if (m_material != nullptr)
+}
+
+void GameObject::AddRigidBody(float _mass, float _coe)
+{
+	if (m_rigid == nullptr)
 	{
-		m_material->Bind();
-
+		m_rigid = new RigidBody(_mass, _coe);
 	}
-  	m_mesh->Draw();
- 
-//	if (m_obb)
-	//	m_obb->drawBox(fullMatrix);
-
 }
 
 void GameObject::setModelMatrix(glm::mat4 rotationM, glm::mat4 translateM)
@@ -186,49 +140,40 @@ void GameObject::refreshOcTree()
 
 void GameObject::Update(float deltaTime)
 {
- 	m_force = vec3(0, -10, 0) * m_mass;
-
-	// position update
-	m_accelerate = m_force / m_mass;
-	m_velocity += (m_accelerate*deltaTime);
-	position += (m_velocity * deltaTime);
-
-	if (position.y < 0.6f - 0.002f)
+	if (m_rigid)
 	{
-		position.y = 0.6f + 0.002f;
-		m_velocity = vec3(0, 0, 0);
+		m_rigid->m_force = vec3(0, -10, 0) * m_rigid->m_mass;
 
+		// position update
+		m_rigid->m_accelerate = m_rigid->m_force / m_rigid->m_mass;
+		m_rigid->m_velocity += (m_rigid->m_accelerate*deltaTime);
+		position += (m_rigid->m_velocity * deltaTime);
+
+		if (position.y < 0.6f - 0.002f)
+		{
+			position.y = 0.6f + 0.002f;
+			m_rigid->m_velocity = vec3(0, 0, 0);
+			m_rigid->m_force = vec3(0, 0, 0);
+		}
 	}
 
 
 
 	translateMatrix = translate(position);
 
-	if (    m_prevPos != position)
+	if ( m_prevPos != position)
 	{
 		m_prevPos = this->position;
 
-
 		refreshOcTree();
- 
-
-
 	}
  
- 
-	m_force = vec3(0, 0, 0);
 }
 
-void GameObject::addFroceToOther(GameObject *other)
-{
-	//other->m_force = this->m_force;
-	//other->
-}
+
 
 
 GameObject::~GameObject()
 {
-	delete m_material;
-	delete m_mesh;
-	delete m_shader;
+
 }
