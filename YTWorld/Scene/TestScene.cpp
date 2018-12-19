@@ -49,6 +49,9 @@ bool isTabPress = false;
 
 void TestScene::UpdateScene(float deltaTime)
 {
+	if (bindObject == nullptr)
+		bindObject = box1;
+
 	if (isTabPress == true && glfwGetKey(m_window, GLFW_KEY_TAB) == GLFW_RELEASE)
 	{
 		if (bindObject == box1 && bindObject->m_rigid != nullptr) {
@@ -65,6 +68,10 @@ void TestScene::UpdateScene(float deltaTime)
 			cout << "box2->box1" << endl;
 		}
 		isTabPress = false;
+	}
+	else if (isTabPress == false && glfwGetKey(m_window, GLFW_KEY_TAB) == GLFW_PRESS)
+	{
+		isTabPress = true;
 	}
 
 	keyboardUpdate(m_window, bindObject, deltaTime);
@@ -96,10 +103,6 @@ TestScene::~TestScene()
 
 void TestScene::keyboardUpdate(GLFWwindow *window, GameObject *bindObject, float deltaTime)
 {
-
-	if (bindObject == nullptr)
-		bindObject = box1;
-
 
 	float speed = 3.0f;
 
@@ -195,15 +198,15 @@ void TestScene::keyboardUpdate(GLFWwindow *window, GameObject *bindObject, float
 
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_RELEASE &&
-		glfwGetKey(window, GLFW_KEY_S) == GLFW_RELEASE &&
-		glfwGetKey(window, GLFW_KEY_A) == GLFW_RELEASE &&
-		glfwGetKey(window, GLFW_KEY_D) == GLFW_RELEASE
-		)
-	{
-		bindObject->m_rigid->m_velocity = vec3(0, bindObject->m_rigid->m_velocity.y, 0);
+	//if (glfwGetKey(window, GLFW_KEY_W) == GLFW_RELEASE &&
+	//	glfwGetKey(window, GLFW_KEY_S) == GLFW_RELEASE &&
+	//	glfwGetKey(window, GLFW_KEY_A) == GLFW_RELEASE &&
+	//	glfwGetKey(window, GLFW_KEY_D) == GLFW_RELEASE
+	//	)
+	//{
+	//	bindObject->m_rigid->m_velocity = vec3(0, bindObject->m_rigid->m_velocity.y, 0);
 
-	}
+	//}
 
 	//	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
 	//bindObject->m_velocity = vec3(0, 0, 0);
